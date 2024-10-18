@@ -1,4 +1,5 @@
 import streamlit as st
+from time import sleep
 
 from apis.authentication import login
 
@@ -12,6 +13,8 @@ def login_form():
             response = login(username=username, password=password)
             if response["success"]:
                 st.success(body=response["message"], icon="✅")
+                sleep(1)
+                st.rerun()
             else:
                 st.error(body=response["message"], icon="❌")
 
