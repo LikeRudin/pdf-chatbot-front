@@ -7,9 +7,9 @@ def logout_button():
     logout_click = st.button("Logout", icon="🔚")
     if logout_click:
         response = logout()
-        if response["success"]:
-            st.success(response["message"])
+        if response.success:
+            st.success(response.message)
             sleep(1)
             st.rerun()
         else:
-            st.error(response["message"])
+            st.error(response.message)

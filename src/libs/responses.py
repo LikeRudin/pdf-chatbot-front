@@ -18,6 +18,10 @@ class ResponseDict:
     message: str
     data: Dict[str, Any]
     errors: Optional[Dict[str, Any]] = None
+    def get(self, key: str, default: Optional[Any] = None) -> Any:
+        if key in self.__dict__:
+            return self.__dict__.get(key, default)
+        return default
 
 
 
