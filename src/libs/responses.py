@@ -16,7 +16,7 @@ STATUS_CODE = "status_code"
 class ResponseDict:
     success: bool
     message: str
-    data: Dict[str, Any]
+    data: Dict[str, Any] = None
     errors: Optional[Dict[str, Any]] = None
     def get(self, key: str, default: Optional[Any] = None) -> Any:
         if key in self.__dict__:
