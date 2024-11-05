@@ -41,10 +41,11 @@ def select_chat(id):
 def conversation_control_bar(title, id):
     enter_part, menu_part = st.columns([4, 1])
     enter_part.button(
-    f"{title}",
-    use_container_width=True,
-    on_click=lambda: select_chat(id),
-    type="primary" if st.session_state[SESSION_STATE_KEY.CURRENT_CHAT_ID] == id else "secondary"
+        label=f"{title}",
+        key=f"chat-{title}-{id}{title}",
+        use_container_width=True,
+        on_click=lambda: select_chat(id),
+        type="primary" if st.session_state[SESSION_STATE_KEY.CURRENT_CHAT_ID] == id else "secondary"
 )
     with menu_part.popover("⚙️"):
         st.button("rename", icon="✏️", key=f"{title}-{id}-rename", use_container_width=True, on_click= lambda: rename_dialog(title=title,id=id))
