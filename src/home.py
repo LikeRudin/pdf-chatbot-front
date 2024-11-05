@@ -7,15 +7,17 @@ from apis.conversation import get_conversations
 
 from constants import SESSION_STATE_KEY
 
-if SESSION_STATE_KEY.LOGGED_IN not in st.session_state:
-    st.session_state[SESSION_STATE_KEY.LOGGED_IN] = False
+
+def init():
+    if SESSION_STATE_KEY.LOGGED_IN not in st.session_state:
+        st.session_state[SESSION_STATE_KEY.LOGGED_IN] = False
+    if SESSION_STATE_KEY.CURRENT_CHAT_ID not in st.session_state:
+        st.session_state[SESSION_STATE_KEY.CURRENT_CHAT_ID] = False
+
+init()
+
 
 is_logged_in = st.session_state.get(SESSION_STATE_KEY.LOGGED_IN, False)
-
-if SESSION_STATE_KEY.CURRENT_CHAT_ID not in st.session_state:
-    st.session_state[SESSION_STATE_KEY.CURRENT_CHAT_ID] = False
-    
-current_conversation_pk = st.session_state.get(SESSION_STATE_KEY.CURRENT_CHAT_ID, False)
 
 if is_logged_in:
     with st.sidebar:
@@ -29,6 +31,8 @@ if is_logged_in:
         conversations = get_conversations().data
         for a_conversation in conversations:
             conversation_control_bar(title=a_conversation["title"], id=a_conversation["id"])
+    st.title("Make some conversations!")
+    current_conversation_pk = st.session_state.get(SESSION_STATE_KEY.CURRENT_CHAT_ID, False)
     message_input(placeholder="Have any Question?", conversation_pk=current_conversation_pk)
         
 else :
