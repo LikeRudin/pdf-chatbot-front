@@ -13,6 +13,8 @@ def init():
         st.session_state[SESSION_STATE_KEY.LOGGED_IN] = False
     if SESSION_STATE_KEY.CURRENT_CHAT_ID not in st.session_state:
         st.session_state[SESSION_STATE_KEY.CURRENT_CHAT_ID] = False
+    if SESSION_STATE_KEY.CURRENT_API_KEY_ID not in st.session_state:
+        st.session_state[SESSION_STATE_KEY.CURRENT_API_KEY_ID] = False
 
 init()
 
