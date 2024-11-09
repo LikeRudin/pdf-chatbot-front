@@ -1,13 +1,13 @@
 import streamlit as st
-import requests
 
+from .session import request_session
 from libs import transfer_response, create_failed_response
 from constants import SESSION_STATE_KEY
 
-API_BASE_URL = " http://127.0.0.1:8000/api/v1/users"
+API_BASE_URL = "/users"
 
 def login(username:str, password:str) :
-    response = requests.post(f"{API_BASE_URL}/login", json={"username": username, "password": password})
+    response = request_session.post(f"{API_BASE_URL}/login", json={"username": username, "password": password})
     result = transfer_response(response)
     if result.success:
         token = result.data.get('token', False)
@@ -16,20 +16,21 @@ def login(username:str, password:str) :
         st.session_state[SESSION_STATE_KEY.LOGGED_IN] = True
         st.session_state[SESSION_STATE_KEY.TOKEN] = token
         st.session_state[SESSION_STATE_KEY.USERNAME] = username
+        request_session.headers.update({"Authorization": f"bearer {token}"})
     return result
 
 
 def logout():
     token = st.session_state.get('token')
     if token:
-        response = requests.post(f"{API_BASE_URL}/logout")
+        response = request_session.post(f"{API_BASE_URL}/logout")
         result = transfer_response(response=response, success_message="logout complete", error_message="failed to logout")
         if result.success:
             st.session_state.clear()
         return result
 
 def join(username:str, password:str):
-    response = requests.post(f"{API_BASE_URL}/join", json={"username":username, "password":password})
+    response = request_session.post(f"{API_BASE_URL}/join", json={"username":username, "password":password})
 
     result = transfer_response(response=response, success_message="welcome", error_message="failed to join")
     if result.success:
@@ -43,7 +44,7 @@ def join(username:str, password:str):
 def refresh_login():
     if SESSION_STATE_KEY.TOKEN in st.session_state:
         token = st.session_state[SESSION_STATE_KEY.TOKEN]
-        response = requests.post(
+        response = request_session.post(
             f"{API_BASE_URL}/refresh",
             headers={"Authorization": f"Bearer {token}"}
         )
@@ -52,6 +53,8 @@ def refresh_login():
             new_token = result.data.get("token", False)
             if new_token:
                 st.session_state[SESSION_STATE_KEY.TOKEN] = new_token
+                request_session.headers.update({"Authorization": f"Bearer {new_token}"})  # 새 토큰으로 헤더 업데이트
+             
                 return result
             else:
                 return create_failed_response(message="Refresh Request Successed. but There is no Token. please tell this issue to backend-engineer")
