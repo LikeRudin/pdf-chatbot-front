@@ -12,5 +12,6 @@ def enroll_api_key_form():
         submit = st.form_submit_button("Enroll", type="primary", use_container_width=True)
         if submit:
             kind_value = "open_ai" if kind == "Open AI - GPT4o" else "claude"
+            print(name, kind_value, api_key)
             result = enroll_api_key(name=name, api_key=api_key, kind=kind_value)
             response_alert(result=result, success_message="succefully enrolled api key", error_message="failed to enroll api key")
