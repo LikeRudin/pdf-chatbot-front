@@ -16,7 +16,7 @@ def login(username:str, password:str) :
         st.session_state[SESSION_STATE_KEY.LOGGED_IN] = True
         st.session_state[SESSION_STATE_KEY.TOKEN] = token
         st.session_state[SESSION_STATE_KEY.USERNAME] = username
-        request_session.headers.update({"Authorization": f"bearer {token}"})
+        request_session.set_bearer_token(token)
     return result
 
 
