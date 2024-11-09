@@ -2,8 +2,7 @@ import streamlit as st
 
 from components.features.auth import login_form,logout_button,join_form
 from components.features.api_key import key_list, enroll_api_key_form
-from components.features.conversation import create_conversation_form, conversation_control_bar, message_input,message
-from apis.conversation import get_conversations
+from components.features.conversation import create_conversation_form, conversation_list, message_input
 
 from constants import SESSION_STATE_KEY
 
@@ -30,9 +29,7 @@ if is_logged_in:
             enroll_api_key_form()
         with st.expander("Start new conversation"):
             create_conversation_form()
-        conversations = get_conversations().data
-        for a_conversation in conversations:
-            conversation_control_bar(title=a_conversation["title"], id=a_conversation["id"])
+        conversation_list()
     st.title("Make some conversations!")
     current_conversation_pk = st.session_state.get(SESSION_STATE_KEY.CURRENT_CHAT_ID, False)
     message_input(placeholder="Have any Question?", conversation_pk=current_conversation_pk)

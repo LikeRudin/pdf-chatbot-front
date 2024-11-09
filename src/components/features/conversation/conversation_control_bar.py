@@ -2,7 +2,7 @@ import streamlit as st
 
 from time import sleep
 from constants import SESSION_STATE_KEY
-from apis.conversation import delete_conversation
+from apis.conversation import delete_conversation, get_conversations
 from components.commons import response_alert
 
 
@@ -26,7 +26,7 @@ def delete_dialog(title, id):
     
     if delete.button("Delete", key=f"conversation_delete{title}-{id}", type="primary", use_container_width=True):
         response = delete_conversation(pk=id)
-        response_alert(response) 
+        response_alert(response)
         st.rerun()
             
         
@@ -52,4 +52,12 @@ def conversation_control_bar(title, id):
         st.button("delete", icon="❌", key=f"{title}-{id}-delete", use_container_width=True, on_click= lambda: delete_dialog(title=title,id=id))
             
 
-
+def conversation_list():
+    if SESSION_STATE_KEY.CONVERSATION_LIST not in st.session_state:
+        st.session_state[SESSION_STATE_KEY.CONVERSATION_LIST] = []
+        st.write("There is no conversation yet")
+        get_conversations()
+    
+    conversations = st.session_state.get(SESSION_STATE_KEY.CONVERSATION_LIST, [])
+    for a_conversation in conversations:
+        conversation_control_bar(title=a_conversation["title"], id=a_conversation["id"])
