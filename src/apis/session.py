@@ -10,7 +10,7 @@ API_BASE_URL = "http://127.0.0.1:8000/api/v1"
 """
 TODO 
 1. 베포후 API_BASE_URL 변경 
-2. server에 refresh 넣기
+2. server에 refresh service 생성해 넣기
 3. Refresh를 작동시키기 위한 default header 추가
 
 """
